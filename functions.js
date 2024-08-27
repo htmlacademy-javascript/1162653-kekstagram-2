@@ -1,17 +1,11 @@
 // Функция для проверки длины строки
 // Принимает строку и максимальную длину и возвращает true, если строка меньше или равна указанной длине, и false, если строка длиннее.
 
-const isLengthCorrect = (string, maxLength) => {
-  if (string.length <= maxLength) {
-    return true;
-  }
-  return false;
-};
+const checkStringLength = (string, maxLength) => string.length <= maxLength;
 
-
-isLengthCorrect('проверяемая строка', 20); // true
-isLengthCorrect('проверяемая строка', 18); // true
-isLengthCorrect('проверяемая строка', 10); // false
+checkStringLength('проверяемая строка', 20); // true
+checkStringLength('проверяемая строка', 18); // true
+checkStringLength('проверяемая строка', 10); // false
 
 // Функция для проверки, является ли строка палиндромом
 
