@@ -117,4 +117,3 @@ const createPhoto = () => {
 // Генерация массива из 25 объектов фотографии
 const newPhoto = Array.from({ length: PHOTO_COUNT }, createPhoto);
 
-console.log(newPhoto);
