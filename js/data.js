@@ -99,15 +99,15 @@ const getRandomMessage = () => {
 };
 
 // Функция для получения случайного уникального числа
-const getRandomUniqueNumbers = (count, max) => {
-  const uniqueNumbers = new Set();
-  while (uniqueNumbers.size < count) {
-    uniqueNumbers.add(getRandomInteger(1, max));
+const getRandomUniqueIds = (count, max) => {
+  const uniqueIds = new Set();
+  while (uniqueIds.size < count) {
+    uniqueIds.add(getRandomInteger(1, max));
   }
-  return Array.from(uniqueNumbers);
+  return Array.from(uniqueIds);
 };
 
-const randomIds = getRandomUniqueNumbers(PHOTO_COUNT, PHOTO_COUNT);
+const randomIds = getRandomUniqueIds(PHOTO_COUNT, PHOTO_COUNT);
 
 // Счетчик для уникальных ID
 let commentIdCounter = 1;
