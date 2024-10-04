@@ -98,9 +98,20 @@ const getRandomMessage = () => {
   return messages.join(' ');
 };
 
-// Счетчик для уникальных ID, используем замыкания
+// Функция для получения случайного уникального числа
+const getRandomUniqueIds = (count, max) => {
+  const uniqueIds = new Set();
+  while (uniqueIds.size < count) {
+    uniqueIds.add(getRandomInteger(1, max));
+  }
+  return Array.from(uniqueIds);
+};
+
+const randomIds = getRandomUniqueIds(PHOTO_COUNT, PHOTO_COUNT);
+
+// Счетчик для уникальных ID
 let commentIdCounter = 1;
-let photoIdCounter = 1;
+let photoIdCounter = 0;
 
 // Функция создания случайного комментария
 const createComment = () => {
@@ -115,7 +126,7 @@ const createComment = () => {
 
 // Функция создания объекта фотографии
 const createPhoto = () => {
-  const id = photoIdCounter++; // Та же логика, что в commentId. Технически, он может увеличиться и больше 25, если мы поменяем PHOTO_COUNT
+  const id = randomIds[photoIdCounter++];
   return {
     id, // Уникальный ID для фотографии
     url: `photos/${id}.jpg`, // Ссылка на фотографию
