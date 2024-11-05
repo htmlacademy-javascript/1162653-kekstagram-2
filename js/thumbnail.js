@@ -28,6 +28,6 @@ const renderThumbnails = (thumbnails) => {
   thumbnailListElement.appendChild(thumbnailFragment);
 };
 
-export { thumbnailListElement, renderThumbnails };
+export { renderThumbnails };
 
 
