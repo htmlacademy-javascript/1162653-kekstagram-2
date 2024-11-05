@@ -4,10 +4,11 @@ const thumbnailTemplate = document.querySelector('#picture')
   .querySelector('.picture');
 
 // Функция возвращает одну миниатюр
-const createThumbnail = ({ url, description, likes, comments }) => {
+const createThumbnail = ({ id, url, description, likes, comments }) => {
   const thumbnailElement = thumbnailTemplate.cloneNode(true);
   const userPicture = thumbnailElement.querySelector('.picture__img');
 
+  userPicture.dataset.pictureId = id;
   userPicture.src = url;
   userPicture.alt = description;
   thumbnailElement.querySelector('.picture__likes').textContent = likes;
@@ -27,6 +28,6 @@ const renderThumbnails = (thumbnails) => {
   thumbnailListElement.appendChild(thumbnailFragment);
 };
 
-export { renderThumbnails };
+export { thumbnailListElement, renderThumbnails };
 
 
