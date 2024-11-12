@@ -5,7 +5,6 @@ let commentsArray = [];
 const bigPicture = document.querySelector('.big-picture');
 const commentsContainer = bigPicture.querySelector('.social__comments');
 const commentsTemplate = document.querySelector('.social__comment');
-//const commentCountElement = bigPicture.querySelector('.social__comment-count');
 const commentLoaderElement = bigPicture.querySelector('.comments-loader');
 const shownCommentsCount = bigPicture.querySelector('.social__comment-shown-count');
 const totalCommentsCount = bigPicture.querySelector('.social__comment-total-count');
