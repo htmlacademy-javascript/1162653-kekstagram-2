@@ -1,4 +1,4 @@
-const thumbnailListElement = document.querySelector('.pictures');
+const thumbnailList = document.querySelector('.pictures');
 const thumbnailTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
@@ -26,7 +26,7 @@ const renderThumbnails = (thumbnails) => {
     thumbnailFragment.appendChild(thumbnailElement);
   });
 
-  thumbnailListElement.appendChild(thumbnailFragment);
+  thumbnailList.appendChild(thumbnailFragment);
 };
 
 export { renderThumbnails };

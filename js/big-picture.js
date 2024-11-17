@@ -4,13 +4,13 @@ import { clearComments, renderComments } from './comments.js';
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
 const bigPictureCloseButton = bigPicture.querySelector('.big-picture__cancel');
-const likesCountElement = bigPicture.querySelector('.likes-count');
+const likesCount = bigPicture.querySelector('.likes-count');
 const commentsCaption = bigPicture.querySelector('.social__caption');
 
 // Функция для отрисовки полноэкранного изображения
 const renderBigPicture = ({ description, comments, likes, url }) => {
   bigPictureImg.src = url;
-  likesCountElement.textContent = likes;
+  likesCount.textContent = likes;
   commentsCaption.textContent = description;
 
   // Рендерим комментарии
