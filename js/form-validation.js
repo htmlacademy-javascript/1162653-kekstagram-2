@@ -2,27 +2,28 @@ const uploadPictureForm = document.querySelector('.img-upload__form');
 const hashtagsField = uploadPictureForm.querySelector('.text__hashtags');
 const commentField = uploadPictureForm.querySelector('.text__description');
 
+const HASHTAGS_RULE = /^#[a-zа-яё0-9]{1,19}$/i;
+const HASHTAGS_COUNT = 5;
+const COMMENT_LENGTH = 140;
+
 // Добавляем валидацию формы с хештегом и комментарием
 const pristine = new Pristine(uploadPictureForm, {
   classTo: 'img-upload__field-wrapper',
-  errorClass: 'img-upload__field-wrapper--error',
+  errorTextClass: 'img-upload__field-wrapper--error',
   errorTextParent: 'img-upload__field-wrapper',
 });
 
 // Валидация хештегов
-function validateHashtags(value) {
-  const hashtagsText = value.toLowerCase().trim();
-  const hashtags = hashtagsText.split(/\s+/);
+const validateHashtags = (value) => {
+  const hashtags = value.toLowerCase().trim().split(/\s+/).filter((item) => item);
   const uniqueHashtags = new Set(hashtags);
 
-  const hashtagsRule = /^#[a-zа-яё0-9]{1,19}$/i;
-
-  if (!hashtagsText) {
+  if (!hashtags) {
     return true;
   }
 
-  if (hashtags.length > 5) {
-    return 'Не больше 5 хэштегов';
+  if (hashtags.length > HASHTAGS_COUNT) {
+    return `Не больше "${HASHTAGS_COUNT}" хэштегов`;
   }
 
   if (uniqueHashtags.size !== hashtags.length) {
@@ -30,24 +31,22 @@ function validateHashtags(value) {
   }
 
   for (const hashtag of hashtags) {
-    if (!hashtagsRule.test(hashtag)) {
+    if (!HASHTAGS_RULE.test(hashtag)) {
       return `Неверный формат хэштега: "${hashtag}"`;
     }
   }
 
-  return true; // Все проверки пройдены
-}
+  return true;
+};
 
 // Валидлация комментария
-function validateComment(value) {
-  return value.length <= 140;
-}
+const validateComment = (value) => value.length <= COMMENT_LENGTH;
 
 // Совершаем проверку и присваиваем ошибки
 pristine.addValidator(
   commentField,
   validateComment,
-  'Краткость — сестра таланта. Сократите текст до 140 символов'
+  `Краткость — сестра таланта. Сократите текст до "${COMMENT_LENGTH}" символов`
 );
 
 pristine.addValidator(
