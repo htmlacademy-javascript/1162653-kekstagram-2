@@ -1,4 +1,5 @@
 import { isEscapeKey } from './util.js';
+import { validateForm, resetValidateForm } from './form-validation.js';
 
 const uploadPictureForm = document.querySelector('.img-upload__form');
 const hashtagsField = uploadPictureForm.querySelector('.text__hashtags');
@@ -36,6 +37,7 @@ function closePictureEditor() {
   pictureEditor.classList.add('hidden');
   document.body.classList.remove('modal-open');
   uploadPictureForm.reset();
+  resetValidateForm();
   document.removeEventListener('keydown', onDocumentKeydown);
 }
 
@@ -45,6 +47,15 @@ uploadPictureButton.addEventListener('change', () => {
 
 closeEditorButton.addEventListener('click', () => {
   closePictureEditor();
+});
+
+// Реализуем отправку формы при успешной валидации
+uploadPictureForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  if (validateForm) {
+    hashtagsField.value = hashtagsField.value.trim().replaceAll(/\s+/g, ' ');
+    uploadPictureForm.submit();
+  }
 });
 
 

@@ -5,6 +5,7 @@ const commentField = uploadPictureForm.querySelector('.text__description');
 const HASHTAGS_RULE = /^#[a-zа-яё0-9]{1,19}$/i;
 const HASHTAGS_COUNT = 5;
 const COMMENT_LENGTH = 140;
+let invalidHashtag = '';
 
 // Добавляем валидацию формы с хештегом и комментарием
 const pristine = new Pristine(uploadPictureForm, {
@@ -14,29 +15,34 @@ const pristine = new Pristine(uploadPictureForm, {
 });
 
 // Валидация хештегов
-const validateHashtags = (value) => {
-  const hashtags = value.toLowerCase().trim().split(/\s+/).filter((item) => item);
+// Преобразуем строку в массив хештегов
+const transformHashtags = (value) => value.toLowerCase().trim().split(/\s+/).filter((item) => item);
+
+// Проверка на количество хештегов
+const validateHashtagsCount = (value) => {
+  const hashtags = transformHashtags(value);
+  return hashtags.length <= 5;
+};
+
+// Проверка на уникальность
+const validateHashtagUnique = (value) => {
+  const hashtags = transformHashtags(value);
   const uniqueHashtags = new Set(hashtags);
+  return uniqueHashtags.size === hashtags.length;
+};
 
-  if (!hashtags) {
-    return true;
-  }
-
-  if (hashtags.length > HASHTAGS_COUNT) {
-    return `Не больше "${HASHTAGS_COUNT}" хэштегов`;
-  }
-
-  if (uniqueHashtags.size !== hashtags.length) {
-    return 'Хэштеги не должны повторяться';
-  }
-
-  for (const hashtag of hashtags) {
+// Проверка на соответствие правилам написания хештегов
+const validateHashtagPattern = (value) => {
+  const hashtags = transformHashtags(value);
+  invalidHashtag = '';
+  const isValid = hashtags.every((hashtag) => {
     if (!HASHTAGS_RULE.test(hashtag)) {
-      return `Неверный формат хэштега: "${hashtag}"`;
+      invalidHashtag = hashtag;
+      return false;
     }
-  }
-
-  return true;
+    return true;
+  });
+  return isValid;
 };
 
 // Валидлация комментария
@@ -51,18 +57,32 @@ pristine.addValidator(
 
 pristine.addValidator(
   hashtagsField,
-  (value) => {
-    const validationResult = validateHashtags(value);
-    return validationResult === true;
-  },
-  (value) => validateHashtags(value),
+  validateHashtagPattern,
+  () => `Неверный формат хэштега: "${invalidHashtag}"`,
+  1,
+  true
 );
 
-// Реализуем отправку формы при успешной валидации
-uploadPictureForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  if (pristine.validate()) {
-    hashtagsField.value = hashtagsField.value.trim().replaceAll(/\s+/g, ' ');
-    uploadPictureForm.submit();
-  }
-});
+pristine.addValidator(
+  hashtagsField,
+  validateHashtagUnique,
+  'Хэштеги не должны повторяться',
+  2,
+  true
+);
+
+pristine.addValidator(
+  hashtagsField,
+  validateHashtagsCount,
+  `Не больше "${HASHTAGS_COUNT}" хэштегов`,
+  3,
+  true
+);
+
+// Функция проверки формы
+const validateForm = () => pristine.validate();
+
+// Функция сброса ошибок
+const resetValidateForm = () => pristine.reset();
+
+export { validateForm, resetValidateForm };
