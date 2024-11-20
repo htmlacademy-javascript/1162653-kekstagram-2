@@ -2,10 +2,10 @@ const uploadPictureForm = document.querySelector('.img-upload__form');
 const hashtagsField = uploadPictureForm.querySelector('.text__hashtags');
 const commentField = uploadPictureForm.querySelector('.text__description');
 
-const HASHTAGS_RULE = /^#[a-zа-яё0-9]{1,19}$/i;
+const HASHTAG_PATTERN = /[a-zа-яё0-9]$/i;
 const HASHTAGS_COUNT = 5;
 const COMMENT_LENGTH = 140;
-let invalidHashtag = '';
+let hashtagErrors = [];
 
 // Добавляем валидацию формы с хештегом и комментарием
 const pristine = new Pristine(uploadPictureForm, {
@@ -34,15 +34,21 @@ const validateHashtagUnique = (value) => {
 // Проверка на соответствие правилам написания хештегов
 const validateHashtagPattern = (value) => {
   const hashtags = transformHashtags(value);
-  invalidHashtag = '';
-  const isValid = hashtags.every((hashtag) => {
-    if (!HASHTAGS_RULE.test(hashtag)) {
-      invalidHashtag = hashtag;
-      return false;
+  hashtagErrors = [];
+
+  hashtags.forEach((hashtag) => {
+    if (!hashtag.startsWith('#')) {
+      hashtagErrors.push(`Хэштег ${hashtag} должен начинаться с символа #.`);
+    } else if (hashtag.length === 1) {
+      hashtagErrors.push(`Хэштег ${hashtag} не может состоять только из #.`);
+    } else if (hashtag.length > 20) {
+      hashtagErrors.push(`Хэштег ${hashtag} не может содержать более 20 символов.`);
+    } else if (!HASHTAG_PATTERN.test(hashtag)) {
+      hashtagErrors.push(`Хэштег ${hashtag} должен состоять только из букв и чисел`);
     }
-    return true;
   });
-  return isValid;
+
+  return hashtagErrors.length === 0;
 };
 
 // Валидлация комментария
@@ -58,7 +64,7 @@ pristine.addValidator(
 pristine.addValidator(
   hashtagsField,
   validateHashtagPattern,
-  () => `Неверный формат хэштега: "${invalidHashtag}"`,
+  () => hashtagErrors.join('<br>'),
   1,
   true
 );
@@ -67,15 +73,15 @@ pristine.addValidator(
   hashtagsField,
   validateHashtagUnique,
   'Хэштеги не должны повторяться',
-  2,
+  3,
   true
 );
 
 pristine.addValidator(
   hashtagsField,
   validateHashtagsCount,
-  `Не больше "${HASHTAGS_COUNT}" хэштегов`,
-  3,
+  `Слишком много хештегов! Добавьте не больше ${HASHTAGS_COUNT}`,
+  4,
   true
 );
 
