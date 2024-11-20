@@ -73,7 +73,7 @@ pristine.addValidator(
   hashtagsField,
   validateHashtagUnique,
   'Хэштеги не должны повторяться',
-  3,
+  2,
   true
 );
 
@@ -81,7 +81,7 @@ pristine.addValidator(
   hashtagsField,
   validateHashtagsCount,
   `Слишком много хештегов! Добавьте не больше ${HASHTAGS_COUNT}`,
-  4,
+  3,
   true
 );
 
