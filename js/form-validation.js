@@ -58,7 +58,7 @@ const validateComment = (value) => value.length <= COMMENT_LENGTH;
 pristine.addValidator(
   commentField,
   validateComment,
-  `Краткость — сестра таланта. Сократите текст до "${COMMENT_LENGTH}" символов`
+  `Краткость — сестра таланта. Сократите текст до ${COMMENT_LENGTH} символов`
 );
 
 pristine.addValidator(
