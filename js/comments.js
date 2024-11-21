@@ -1,11 +1,11 @@
 const COUNT_STEP = 5;
 let currentCount = 0;
-let commentsArray = [];
+let comments = [];
 
 const bigPicture = document.querySelector('.big-picture');
 const commentsContainer = bigPicture.querySelector('.social__comments');
 const commentsTemplate = document.querySelector('.social__comment');
-const commentLoaderElement = bigPicture.querySelector('.comments-loader');
+const commentLoader = bigPicture.querySelector('.comments-loader');
 const shownCommentsCount = bigPicture.querySelector('.social__comment-shown-count');
 const totalCommentsCount = bigPicture.querySelector('.social__comment-total-count');
 commentsContainer.innerHTML = '';
@@ -13,7 +13,7 @@ commentsContainer.innerHTML = '';
 // Функция для постепенного рендеринга комментариев
 const renderNextComments = () => {
   const commentsFragment = document.createDocumentFragment();
-  const renderedComments = commentsArray.slice(currentCount, currentCount + COUNT_STEP);
+  const renderedComments = comments.slice(currentCount, currentCount + COUNT_STEP);
   const renderedCommentsLength = renderedComments.length + currentCount;
 
   renderedComments.forEach((comment) => {
@@ -26,10 +26,10 @@ const renderNextComments = () => {
 
   commentsContainer.appendChild(commentsFragment);
   shownCommentsCount.textContent = renderedCommentsLength;
-  totalCommentsCount.textContent = commentsArray.length;
+  totalCommentsCount.textContent = comments.length;
 
-  if (renderedCommentsLength >= commentsArray.length) {
-    commentLoaderElement.classList.add('hidden');
+  if (renderedCommentsLength >= comments.length) {
+    commentLoader.classList.add('hidden');
   }
   currentCount += COUNT_STEP;
 };
@@ -38,15 +38,17 @@ const renderNextComments = () => {
 const clearComments = () => {
   currentCount = 0;
   commentsContainer.innerHTML = '';
-  commentLoaderElement.classList.remove('hidden');
-  commentLoaderElement.removeEventListener('click', renderNextComments);
+  commentLoader.classList.remove('hidden');
+  commentLoader.removeEventListener('click', renderNextComments);
 };
 
 // Функция для рендеринга комментариев
 const renderComments = (currentComments) => {
-  commentsArray = currentComments;
+  comments = currentComments;
   renderNextComments();
-  commentLoaderElement.addEventListener('click', renderNextComments);
+  commentLoader.addEventListener('click', () => {
+    renderNextComments();
+  });
 };
 
 export { clearComments, renderComments };
