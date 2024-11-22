@@ -5,6 +5,7 @@ const commentField = uploadPictureForm.querySelector('.text__description');
 const HASHTAG_PATTERN = /[a-zа-яё0-9]$/i;
 const HASHTAGS_COUNT = 5;
 const COMMENT_LENGTH = 140;
+const HASHTAG_LENGTH = 20;
 let hashtagErrors = [];
 
 // Добавляем валидацию формы с хештегом и комментарием
@@ -21,7 +22,7 @@ const transformHashtags = (value) => value.toLowerCase().trim().split(/\s+/).fil
 // Проверка на количество хештегов
 const validateHashtagsCount = (value) => {
   const hashtags = transformHashtags(value);
-  return hashtags.length <= 5;
+  return hashtags.length <= HASHTAGS_COUNT;
 };
 
 // Проверка на уникальность
@@ -41,8 +42,8 @@ const validateHashtagPattern = (value) => {
       hashtagErrors.push(`Хэштег ${hashtag} должен начинаться с символа #.`);
     } else if (hashtag.length === 1) {
       hashtagErrors.push(`Хэштег ${hashtag} не может состоять только из #.`);
-    } else if (hashtag.length > 20) {
-      hashtagErrors.push(`Хэштег ${hashtag} не может содержать более 20 символов.`);
+    } else if (hashtag.length > HASHTAG_LENGTH) {
+      hashtagErrors.push(`Хэштег ${hashtag} не может содержать более ${HASHTAG_LENGTH} символов.`);
     } else if (!HASHTAG_PATTERN.test(hashtag)) {
       hashtagErrors.push(`Хэштег ${hashtag} должен состоять только из букв и чисел`);
     }
