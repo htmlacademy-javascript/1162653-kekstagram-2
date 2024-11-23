@@ -2,8 +2,11 @@ const uploadPictureForm = document.querySelector('.img-upload__form');
 const hashtagsField = uploadPictureForm.querySelector('.text__hashtags');
 const commentField = uploadPictureForm.querySelector('.text__description');
 
-const HASHTAG_PATTERN = /[a-zа-яё0-9]$/i;
-const HASHTAGS_COUNT = 5;
+const HashtasgsRule = {
+  PATTERN: /^#[a-zа-яё0-9]{1,19}$/i,
+  LENGTH: 20,
+  COUNT: 5,
+};
 const COMMENT_LENGTH = 140;
 let hashtagErrors = [];
 
@@ -21,7 +24,7 @@ const transformHashtags = (value) => value.toLowerCase().trim().split(/\s+/).fil
 // Проверка на количество хештегов
 const validateHashtagsCount = (value) => {
   const hashtags = transformHashtags(value);
-  return hashtags.length <= 5;
+  return hashtags.length <= HashtasgsRule.COUNT;
 };
 
 // Проверка на уникальность
@@ -41,9 +44,9 @@ const validateHashtagPattern = (value) => {
       hashtagErrors.push(`Хэштег ${hashtag} должен начинаться с символа #.`);
     } else if (hashtag.length === 1) {
       hashtagErrors.push(`Хэштег ${hashtag} не может состоять только из #.`);
-    } else if (hashtag.length > 20) {
-      hashtagErrors.push(`Хэштег ${hashtag} не может содержать более 20 символов.`);
-    } else if (!HASHTAG_PATTERN.test(hashtag)) {
+    } else if (hashtag.length > HashtasgsRule.LENGTH) {
+      hashtagErrors.push(`Хэштег ${hashtag} не может содержать более ${HashtasgsRule.LENGTH} символов.`);
+    } else if (!HashtasgsRule.PATTERN.test(hashtag)) {
       hashtagErrors.push(`Хэштег ${hashtag} должен состоять только из букв и чисел`);
     }
   });
@@ -78,7 +81,7 @@ pristine.addValidator(
 pristine.addValidator(
   hashtagsField,
   validateHashtagsCount,
-  `Слишком много хештегов! Добавьте не больше ${HASHTAGS_COUNT}`,
+  `Слишком много хештегов! Добавьте не больше ${HashtasgsRule.COUNT}`,
   3
 );
 
