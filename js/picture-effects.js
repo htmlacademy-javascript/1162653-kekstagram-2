@@ -4,72 +4,32 @@ const effectsValue = document.querySelector('.effect-level__value');
 const effectRadios = document.querySelectorAll('.effects__radio');
 const picturePreview = document.querySelector('.img-upload__preview img');
 
-const DEFAULT_EFFECT = 'none';
 const DEFAULT_VALUE = 100;
 
 // Настройки для каждого эффекта
 const effectSettings = {
-  chrome: {
-    filter: 'grayscale',
-    unit: '',
-    min: 0,
-    max: 1,
-    step: 0.1
-  },
-  sepia: {
-    filter:
-      'sepia',
-    unit: '',
-    min: 0,
-    max: 1,
-    step: 0.1
-  },
-  marvin: {
-    filter: 'invert',
-    unit: '%',
-    min: 0,
-    max: 100,
-    step: 1
-  },
-  phobos: {
-    filter: 'blur',
-    unit: 'px',
-    min: 0,
-    max: 3,
-    step: 0.1
-  },
-  heat: {
-    filter:
-      'brightness',
-    unit: '',
-    min: 1,
-    max: 3,
-    step: 0.1
-  },
+  none: { filter: 'none', unit: '', range: { min: 0, max: 100, }, start: 0, step: 10, connect: 'lower' },
+  chrome: { filter: 'grayscale', unit: '', min: 0, max: 1, step: 0.1 },
+  sepia: { filter: 'sepia', unit: '', min: 0, max: 1, step: 0.1 },
+  marvin: { filter: 'invert', unit: '%', min: 0, max: 100, step: 1 },
+  phobos: { filter: 'blur', unit: 'px', min: 0, max: 3, step: 0.1 },
+  heat: { filter: 'brightness', unit: '', min: 1, max: 3, step: 0.1 },
 };
 
 // Создаем слайдер и задаем апдейт значения
 effectsValue.value = DEFAULT_VALUE;
 
-noUiSlider.create(effectsSlider, {
-  range: {
-    min: 0,
-    max: 100,
-  },
-  start: 0,
-  step: 10,
-  connect: 'lower',
-});
+noUiSlider.create(effectsSlider, effectSettings.none);
 
 effectsSlider.noUiSlider.on('update', () => {
   effectsValue.value = effectsSlider.noUiSlider.get();
 });
 
 // Функция изменения фильтра
-const changeEffect = (evt) => {
+const onEffectChange = (evt) => {
   const effect = evt.target.value;
 
-  if (effect === DEFAULT_EFFECT) {
+  if (effect === effectSettings.none.filter) {
     effectsSlider.parentElement.classList.add('hidden');
     picturePreview.style.filter = '';
     effectsValue.value = '';
@@ -98,7 +58,7 @@ const resetEffects = () => {
   effectsValue.value = DEFAULT_VALUE;
   effectsSlider.noUiSlider.set(DEFAULT_VALUE);
   effectsContainer.classList.add('hidden');
-  document.querySelector(`#effect-${DEFAULT_EFFECT}`).checked = true;
+  document.querySelector(`#effect-${effectSettings.none.filter}`).checked = true;
   effectsSlider.noUiSlider.off('update');
 };
 
@@ -110,7 +70,7 @@ const initializeEffects = () => {
 
 // Обработчик события для каждой радиокнопки
 effectRadios.forEach((radio) => {
-  radio.addEventListener('change', changeEffect);
+  radio.addEventListener('change', onEffectChange);
 });
 
 export { resetEffects, initializeEffects };
