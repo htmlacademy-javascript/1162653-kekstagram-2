@@ -3,12 +3,14 @@ const pictureDecreaser = document.querySelector('.scale__control--smaller');
 const pictureIncreaser = document.querySelector('.scale__control--bigger');
 const pictureScale = document.querySelector('.scale__control--value');
 
-const SCALE_STEP = 0.25;
-const MIN_SCALE = 0.25;
-const MAX_SCALE = 1;
-const DEFAULT_SCALE = 1;
+const Scale = {
+  STEP: 0.25,
+  MIN: 0.25,
+  MAX: 1,
+  DEFAULT: 1,
+};
 
-let scale = DEFAULT_SCALE;
+let scale = Scale.DEFAULT;
 
 // Обновление отображения масштаба
 const updateScale = () => {
@@ -18,23 +20,23 @@ const updateScale = () => {
 
 // Увеличение размера изображения
 const increasePicture = () => {
-  if (scale < MAX_SCALE) {
-    scale += SCALE_STEP;
+  if (scale < Scale.MAX) {
+    scale += Scale.STEP;
     updateScale();
   }
 };
 
 // Уменьшение масштаба изображения
 const decreasePicture = () => {
-  if (scale > MIN_SCALE) {
-    scale -= SCALE_STEP;
+  if (scale > Scale.MIN) {
+    scale -= Scale.STEP;
     updateScale();
   }
 };
 
 // Сброс масштаба до начального значения
 const resetScale = () => {
-  scale = DEFAULT_SCALE;
+  scale = Scale.DEFAULT;
   updateScale();
 };
 
