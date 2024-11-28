@@ -2,6 +2,10 @@ import { isEscapeKey } from './util.js';
 import { validateForm, resetValidateForm } from './form-validation.js';
 import { resetScale } from './picture-resizer.js';
 import { resetEffects, initializeEffects } from './picture-effects.js';
+import { sendData } from './api.js';
+import './picture-resizer.js';
+import './picture-effects.js';
+import { initErrorMessage } from './user-messages.js';
 
 const uploadPictureForm = document.querySelector('.img-upload__form');
 const hashtagsField = uploadPictureForm.querySelector('.text__hashtags');
@@ -9,6 +13,23 @@ const commentField = uploadPictureForm.querySelector('.text__description');
 const uploadPictureButton = document.querySelector('.img-upload__input');
 const pictureEditor = document.querySelector('.img-upload__overlay');
 const closeEditorButton = document.querySelector('.img-upload__cancel');
+const submitButton = document.querySelector('.img-upload__submit');
+
+// Добавляем интерактивность кнопок
+const SubmitButtonText = {
+  IDLE: 'Сохранить',
+  SENDING: 'Сохраняю...'
+};
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
 
 // Открытие и закрытие формы загрузки изображения
 const onDocumentKeydown = (evt) => {
@@ -18,7 +39,7 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
-// Функция для открытия формы редоактирования
+// Функция для открытия формы редактирования
 const openPictureEditor = () => {
   pictureEditor.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -26,7 +47,7 @@ const openPictureEditor = () => {
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
-// Функция для закрытия формы редоактирования
+// Функция для закрытия формы редактирования
 function closePictureEditor() {
   pictureEditor.classList.add('hidden');
   document.body.classList.remove('modal-open');
@@ -46,12 +67,31 @@ closeEditorButton.addEventListener('click', () => {
 });
 
 // Реализуем отправку формы при успешной валидации
-uploadPictureForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  if (validateForm) {
-    hashtagsField.value = hashtagsField.value.trim().replaceAll(/\s+/g, ' ');
-    uploadPictureForm.submit();
-  }
-});
+const setUploadFormSubmit = (onSuccessAction, onSuccessMessage) => {
+  uploadPictureForm.addEventListener('submit', (evt) => {
+
+    evt.preventDefault();
+
+    const isValid = validateForm();
+
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(
+          () => {
+            onSuccessAction();
+            onSuccessMessage();
+          })
+        .catch(
+          () => {
+            initErrorMessage();
+          }
+        )
+        .finally(unblockSubmitButton);
+    }
+  });
+};
+
+export { setUploadFormSubmit, closePictureEditor, onDocumentKeydown };
 
 

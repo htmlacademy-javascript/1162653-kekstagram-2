@@ -12,4 +12,5 @@ const getRandomArrayElement = (elements) => elements[getRandomInteger(0, element
 // Функция для выбора кнопок
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
+
 export { getRandomInteger, getRandomArrayElement, isEscapeKey };

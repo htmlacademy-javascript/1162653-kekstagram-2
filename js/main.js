@@ -1,10 +1,16 @@
-import { generatePhotos } from './data.js';
 import { initGallery } from './gallery.js';
-import './upload-form.js';
-import './picture-resizer.js';
-import './picture-effects.js';
+import { setUploadFormSubmit, closePictureEditor } from './upload-form.js';
+import { getData } from './api.js';
+import { showloadError, initSuccessMessage } from './user-messages.js';
 
-// Создаем данные
-const photos = generatePhotos();
-// Инициализируем галерею миниатюр
-initGallery(photos);
+getData()
+  .then((pictures) => {
+    initGallery(pictures);
+  })
+  .catch(
+    (err) => {
+      showloadError(err.message);
+    }
+  );
+
+setUploadFormSubmit(closePictureEditor, initSuccessMessage);
