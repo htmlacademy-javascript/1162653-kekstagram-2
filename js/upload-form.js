@@ -3,8 +3,6 @@ import { validateForm, resetValidateForm } from './form-validation.js';
 import { resetScale } from './picture-resizer.js';
 import { resetEffects, initializeEffects } from './picture-effects.js';
 import { sendData } from './api.js';
-import './picture-resizer.js';
-import './picture-effects.js';
 import { initErrorMessage } from './user-messages.js';
 
 const uploadPictureForm = document.querySelector('.img-upload__form');

@@ -39,16 +39,16 @@ const clearComments = () => {
   currentCount = 0;
   commentsContainer.innerHTML = '';
   commentLoader.classList.remove('hidden');
-  commentLoader.removeEventListener('click', renderNextComments);
 };
 
 // Функция для рендеринга комментариев
 const renderComments = (currentComments) => {
   comments = currentComments;
   renderNextComments();
-  commentLoader.addEventListener('click', () => {
-    renderNextComments();
-  });
 };
+
+commentLoader.addEventListener('click', () => {
+  renderNextComments();
+});
 
 export { clearComments, renderComments };

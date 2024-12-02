@@ -1,3 +1,5 @@
+const DEBOUNCE_DELAY = 500;
+
 // Функция генерации случайного целого числа в диапазоне [a, b]
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -12,5 +14,25 @@ const getRandomArrayElement = (elements) => elements[getRandomInteger(0, element
 // Функция для выбора кнопок
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
+// Функция устранения дребезга
+const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
 
-export { getRandomInteger, getRandomArrayElement, isEscapeKey };
+// Функция для пропуска кадров
+const throttle = (callback, delayBetweenFrames) => {
+  let lastTime = 0;
+  return (...rest) => {
+    const now = new Date();
+    if (now - lastTime >= delayBetweenFrames) {
+      callback.apply(this, rest);
+      lastTime = now;
+    }
+  };
+};
+
+export { getRandomInteger, getRandomArrayElement, isEscapeKey, debounce, throttle };
