@@ -46,9 +46,10 @@ const clearComments = () => {
 const renderComments = (currentComments) => {
   comments = currentComments;
   renderNextComments();
-  commentLoader.addEventListener('click', () => {
-    renderNextComments();
-  });
 };
+
+commentLoader.addEventListener('click', () => {
+  renderNextComments();
+});
 
 export { clearComments, renderComments };
