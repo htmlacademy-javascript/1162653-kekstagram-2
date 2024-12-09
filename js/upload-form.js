@@ -3,9 +3,7 @@ import { validateForm, resetValidateForm } from './form-validation.js';
 import { resetScale } from './picture-resizer.js';
 import { resetEffects, initializeEffects } from './picture-effects.js';
 import { sendData } from './api.js';
-import './picture-resizer.js';
-import './picture-effects.js';
-import { initErrorMessage } from './user-messages.js';
+import { showModal } from './user-messages.js';
 
 const uploadPictureForm = document.querySelector('.img-upload__form');
 const hashtagsField = uploadPictureForm.querySelector('.text__hashtags');
@@ -67,9 +65,8 @@ closeEditorButton.addEventListener('click', () => {
 });
 
 // Реализуем отправку формы при успешной валидации
-const setUploadFormSubmit = (onSuccessAction, onSuccessMessage) => {
+const setUploadFormSubmit = (onSuccessAction) => {
   uploadPictureForm.addEventListener('submit', (evt) => {
-
     evt.preventDefault();
 
     const isValid = validateForm();
@@ -77,16 +74,13 @@ const setUploadFormSubmit = (onSuccessAction, onSuccessMessage) => {
     if (isValid) {
       blockSubmitButton();
       sendData(new FormData(evt.target))
-        .then(
-          () => {
-            onSuccessAction();
-            onSuccessMessage();
-          })
-        .catch(
-          () => {
-            initErrorMessage();
-          }
-        )
+        .then(() => {
+          onSuccessAction();
+          showModal('success');
+        })
+        .catch(() => {
+          showModal('error');
+        })
         .finally(unblockSubmitButton);
     }
   });
