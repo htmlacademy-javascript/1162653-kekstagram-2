@@ -39,7 +39,9 @@ const showModal = (type) => {
   body.append(modal);
 
   const closeButton = modal.querySelector(`.${type}__button`);
-  closeButton.addEventListener('click', closeModal);
+  closeButton.addEventListener('click', () => {
+    closeModal();
+  });
 
   modal.addEventListener('click', (evt) => {
     if (evt.target === modal) {

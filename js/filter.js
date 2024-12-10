@@ -1,43 +1,44 @@
 import { debounce } from './util.js';
-import { initGallery } from './gallery.js';
-
-const picturesFilter = document.querySelector('.img-filters');
-const ACTIVE_BUTTON = 'img-filters__button--active';
-
-const FILTER = {
-  default: 'filter-default',
-  random: 'filter-random',
-  discussed: 'filter-discussed'
-};
-
-const FILTER_RULE = {
-  random: () => 0.5 - Math.random(),
-  discussed: (a, b) => b.comments.length - a.comments.length
-};
+import { renderThumbnails } from './thumbnail.js';
 
 const RANDOM_PICTURE_COUNT = 10;
 const DEBOUNCE_DELAY = 500;
+const ACTIVE_FILTER_CLASS = 'img-filters__button--active';
 
-let currentFilter = FILTER.default;
+const Filter = {
+  DEFAULT: 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed',
+};
+
+const filterRule = {
+  [Filter.RANDOM]: () => 0.5 - Math.random(),
+  [Filter.DISCUSSED]: (a, b) => b.comments.length - a.comments.length
+};
+
+const picturesFilter = document.querySelector('.img-filters');
+let currentFilter = Filter.DEFAULT;
 let pictures = [];
 
-const debouncedGallery = debounce(initGallery, DEBOUNCE_DELAY);
+const debouncedRenderThumbnails = debounce(renderThumbnails, DEBOUNCE_DELAY);
 
 // Функция с определением типа фильтрации
-const createFilter = () => {
-  let filteredPictures = [];
+const getFilteredPictures = () => {
 
   switch (currentFilter) {
-    case FILTER.default: filteredPictures = pictures;
-      break;
-    case FILTER.random:
-      filteredPictures = pictures.slice().sort(FILTER_RULE.random).slice(0, RANDOM_PICTURE_COUNT);
-      break;
-    case FILTER.discussed: filteredPictures = pictures.slice().sort(FILTER_RULE.discussed);
-      break;
-  }
 
-  debouncedGallery(filteredPictures);
+    case Filter.RANDOM:
+      return pictures.slice().sort(filterRule[currentFilter]).slice(0, RANDOM_PICTURE_COUNT);
+
+    case Filter.DISCUSSED:
+      return pictures.slice().sort(filterRule[currentFilter]);
+
+    case Filter.DEFAULT:
+      return pictures;
+
+    default:
+      return pictures;
+  }
 };
 
 // Применение фильтра при выборе кнопки
@@ -52,12 +53,12 @@ const onFilterChange = (evt) => {
     return;
   }
 
-  const activeButton = document.querySelector(`.${ACTIVE_BUTTON}`);
-  activeButton.classList.remove(ACTIVE_BUTTON);
-  targetButton.classList.add(ACTIVE_BUTTON);
+  const activeButton = document.querySelector(`.${ACTIVE_FILTER_CLASS}`);
+  activeButton.classList.remove(ACTIVE_FILTER_CLASS);
+  targetButton.classList.add(ACTIVE_FILTER_CLASS);
 
   currentFilter = targetButton.id;
-  createFilter();
+  debouncedRenderThumbnails(getFilteredPictures());
 };
 
 // Инициализация фильтра

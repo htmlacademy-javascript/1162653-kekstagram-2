@@ -31,7 +31,7 @@ const unblockSubmitButton = () => {
 
 // Открытие и закрытие формы загрузки изображения
 const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt) && document.activeElement !== hashtagsField && document.activeElement !== commentField) {
+  if (isEscapeKey(evt) && document.activeElement !== hashtagsField && document.activeElement !== commentField && !document.querySelector('.error')) {
     evt.preventDefault();
     closePictureEditor();
   }
