@@ -17,5 +17,3 @@ getData()
 setUploadFormSubmit(closePictureEditor);
 
 showUserPicture();
-
-
