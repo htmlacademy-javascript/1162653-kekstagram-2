@@ -1,107 +1,70 @@
 import { isEscapeKey } from './util.js';
-import { onDocumentKeydown } from './upload-form.js';
 
 const ERROR_SHOW_TIME = 5000;
 
 const body = document.body;
-const loadErrorTemplate = document.querySelector('#data-error').content;
-const sendErrorTemplate = document.querySelector('#error').content;
+const loadErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
+const sendErrorTemplate = document.querySelector('#error').content.querySelector('.error');
 const sendSuccessTemplate = document.querySelector('#success').content.querySelector('.success');
 
-const onSuccessKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeSendSuccess();
+// Сопоставление типа модального окна с шаблоном
+const modalTypeToTemplate = {
+  success: sendSuccessTemplate,
+  error: sendErrorTemplate,
+};
+
+// Закрытие модального окна
+const closeModal = () => {
+  const modal = body.querySelector('.modal');
+  if (modal) {
+    modal.remove();
+    document.removeEventListener('keydown', onDocumentKeydown);
   }
 };
 
-const onErrorKeydown = (evt) => {
+// Обработчик клавиши Escape для закрытия модального окна
+function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeSendError();
+    closeModal();
   }
+}
+
+// Универсальное открытие модального окна
+const showModal = (type) => {
+  const modalTemplate = modalTypeToTemplate[type];
+  const modal = modalTemplate.cloneNode(true);
+
+  modal.classList.add('modal');
+  body.append(modal);
+
+  const closeButton = modal.querySelector(`.${type}__button`);
+  closeButton.addEventListener('click', () => {
+    closeModal();
+  });
+
+  modal.addEventListener('click', (evt) => {
+    if (evt.target === modal) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', onDocumentKeydown);
 };
 
-// Ошибка при загрузке контента
-const showloadError = (message) => {
-  const loadingError = loadErrorTemplate.cloneNode(true);
+// Ошибка загрузки данных
+const showLoadError = (message) => {
+  const loadError = loadErrorTemplate.cloneNode(true);
   if (message) {
-    loadingError.querySelector('.data-error__title').textContent = message;
+    loadError.querySelector('.data-error__title').textContent = message;
   }
 
-  body.append(loadingError);
-
-  const loadingErrorArea = body.querySelector('.data-error');
+  body.append(loadError);
 
   setTimeout(() => {
-    loadingErrorArea.remove();
+    loadError.remove();
   }, ERROR_SHOW_TIME);
 };
 
-// Ошибка при отправке формы
+export { showLoadError, showModal };
 
-const openSendError = () => {
-  const sendingError = sendErrorTemplate.cloneNode(true);
-  body.append(sendingError);
-  document.removeEventListener('keydown', onDocumentKeydown);
-  document.addEventListener('keydown', onErrorKeydown);
-};
-
-function closeSendError() {
-  const sendingErrorArea = body.querySelector('.error');
-  sendingErrorArea.remove();
-  document.removeEventListener('keydown', onErrorKeydown);
-  document.addEventListener('keydown', onDocumentKeydown);
-}
-
-const initErrorMessage = () => {
-  openSendError();
-
-  const errorFormButton = document.querySelector('.error__button');
-  const errorInner = document.querySelector('.error__inner');
-
-  errorFormButton.addEventListener('click', () => {
-    closeSendError();
-  });
-
-  document.addEventListener('click', (e) => {
-    const click = e.composedPath().includes(errorInner);
-    if (!click) {
-      closeSendError();
-    }
-  });
-};
-
-// Успешная отправка формы
-
-const openSendSuccess = () => {
-  const sendingSuccess = sendSuccessTemplate.cloneNode(true);
-  body.appendChild(sendingSuccess);
-  document.addEventListener('keydown', onSuccessKeydown);
-};
-
-function closeSendSuccess() {
-  const sendingSuccessArea = body.querySelector('.success');
-  sendingSuccessArea.remove();
-  document.removeEventListener('keydown', onSuccessKeydown);
-}
-
-const initSuccessMessage = () => {
-  openSendSuccess();
-
-  const successFormButton = document.querySelector('.success__button');
-  const sendingSuccessInner = document.querySelector('.success__inner');
-
-  successFormButton.addEventListener('click', () => {
-    closeSendSuccess();
-  });
-
-  document.addEventListener('click', (e) => {
-    const click = e.composedPath().includes(sendingSuccessInner);
-    if (!click) {
-      closeSendSuccess();
-    }
-  });
-};
-
-export { showloadError, initErrorMessage, initSuccessMessage };
