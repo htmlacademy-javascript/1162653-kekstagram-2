@@ -67,4 +67,3 @@ const showLoadError = (message) => {
 };
 
 export { showLoadError, showModal };
-

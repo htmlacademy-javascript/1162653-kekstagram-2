@@ -70,4 +70,3 @@ const initFilter = (loadedPictures) => {
 };
 
 export { initFilter };
-

@@ -88,4 +88,3 @@ const setUploadFormSubmit = (onSuccessAction) => {
 
 export { setUploadFormSubmit, closePictureEditor, onDocumentKeydown };
 
-
