@@ -42,7 +42,7 @@ const getFilteredPictures = () => {
 };
 
 // Применение фильтра при выборе кнопки
-const onFilterChange = (evt) => {
+const onFilterClick = (evt) => {
   const targetButton = evt.target;
 
   if (!targetButton.matches('.img-filters__button')) {
@@ -66,7 +66,7 @@ const initFilter = (loadedPictures) => {
   pictures = loadedPictures;
 
   picturesFilter.classList.remove('img-filters--inactive');
-  picturesFilter.addEventListener('click', onFilterChange);
+  picturesFilter.addEventListener('click', onFilterClick);
 };
 
 export { initFilter };

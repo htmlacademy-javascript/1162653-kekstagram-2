@@ -25,14 +25,14 @@ const onDocumentKeydown = (evt) => {
 };
 
 // Функция для открытия полноэкранного изображения
-function openBigPicture(image) {
+const openBigPicture = (image) => {
   renderBigPicture(image);
 
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
   document.addEventListener('keydown', onDocumentKeydown);
-}
+};
 
 // Функция для закрытия полноэкранного изображения
 function closeBigPicture() {

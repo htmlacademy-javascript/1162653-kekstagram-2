@@ -1,14 +1,16 @@
-const picturePreview = document.querySelector('.img-upload__preview img');
-const pictureDecreaser = document.querySelector('.scale__control--smaller');
-const pictureIncreaser = document.querySelector('.scale__control--bigger');
-const pictureScale = document.querySelector('.scale__control--value');
-
 const Scale = {
   STEP: 0.25,
   MIN: 0.25,
   MAX: 1,
   DEFAULT: 1,
 };
+
+
+import { picturePreview } from './util.js';
+
+const pictureDecreaser = document.querySelector('.scale__control--smaller');
+const pictureIncreaser = document.querySelector('.scale__control--bigger');
+const pictureScale = document.querySelector('.scale__control--value');
 
 let scale = Scale.DEFAULT;
 

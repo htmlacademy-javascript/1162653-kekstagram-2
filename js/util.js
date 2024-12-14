@@ -1,3 +1,7 @@
+export const picturesContainer = document.querySelector('.pictures');
+export const uploadPictureForm = document.querySelector('.img-upload__form');
+export const picturePreview = document.querySelector('.img-upload__preview img');
+
 // Функция для выбора кнопок
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
