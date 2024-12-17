@@ -1,7 +1,7 @@
+import { picturePreview } from './util.js';
+
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const SHOWN_PICTURE_COUNT = 0;
-
-import { picturePreview } from './util.js';
 
 const pictureChooser = document.querySelector('.img-upload__input');
 const effectsPreview = document.querySelectorAll('.effects__preview');

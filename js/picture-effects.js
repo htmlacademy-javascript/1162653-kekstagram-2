@@ -1,6 +1,6 @@
-const DEFAULT_VALUE = 100;
-
 import { picturePreview } from './util.js';
+
+const DEFAULT_VALUE = 100;
 
 const effectsSlider = document.querySelector('.effect-level__slider');
 const effectsContainer = effectsSlider.parentElement;
@@ -9,7 +9,7 @@ const effectList = document.querySelector('.effects__list');
 
 // Настройки для каждого эффекта
 const effectSettings = {
-  none: { filter: 'none', unit: '', range: { min: 0, max: 100 }, start: 0, step: 10, connect: 'lower' },
+  none: { filter: 'none', unit: '', range: { min: 0, max: 100 }, start: 0, step: 10 },
   chrome: { filter: 'grayscale', unit: '', range: { min: 0, max: 1 }, start: 1, step: 0.1 },
   sepia: { filter: 'sepia', unit: '', range: { min: 0, max: 1 }, start: 1, step: 0.1 },
   marvin: { filter: 'invert', unit: '%', range: { min: 0, max: 100 }, start: 100, step: 1 },
@@ -25,6 +25,7 @@ noUiSlider.create(effectsSlider, {
     to: (value) => Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1),
     from: (value) => parseFloat(value),
   },
+  connect: 'lower',
 });
 
 effectsSlider.noUiSlider.on('update', () => {

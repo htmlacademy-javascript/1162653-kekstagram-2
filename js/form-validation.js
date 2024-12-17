@@ -1,15 +1,16 @@
-const COMMENT_LENGTH = 140;
-
 import { uploadPictureForm } from './util.js';
 
-const hashtagsField = uploadPictureForm.querySelector('.text__hashtags');
-const commentField = uploadPictureForm.querySelector('.text__description');
+const COMMENT_LENGTH = 140;
 
 const HashtagRule = {
   PATTERN: /^#[a-zа-яё0-9]{1,19}$/i,
+  SPACING: /#[^\s]+#/,
   LENGTH: 20,
   COUNT: 5,
 };
+
+const hashtagsField = uploadPictureForm.querySelector('.text__hashtags');
+const commentField = uploadPictureForm.querySelector('.text__description');
 
 let hashtagErrors = [];
 
@@ -38,16 +39,12 @@ const validateHashtagUnique = (value) => {
 };
 
 // Проверка на разделение пробелами
-const validateHashtagSpacing = (value) => !value.includes('##');
+const validateHashtagSpacing = (value) => !HashtagRule.SPACING.test(value);
 
 // Проверка на соответствие правилам написания хештегов
 const validateHashtagPattern = (value) => {
   const hashtags = transformHashtags(value);
   hashtagErrors = [];
-
-  if (!validateHashtagSpacing(value)) {
-    return true;
-  }
 
   hashtags.forEach((hashtag) => {
     if (!hashtag.startsWith('#')) {
@@ -76,29 +73,30 @@ pristine.addValidator(
 
 pristine.addValidator(
   hashtagsField,
+  validateHashtagSpacing,
+  'Хештеги должны разделяться пробелами',
+  1,
+  true
+);
+
+pristine.addValidator(
+  hashtagsField,
   validateHashtagPattern,
   () => hashtagErrors.join('<br>'),
-  1
+  2
 );
 
 pristine.addValidator(
   hashtagsField,
   validateHashtagUnique,
   'Хэштеги не должны повторяться',
-  2
+  3
 );
 
 pristine.addValidator(
   hashtagsField,
   validateHashtagsCount,
   `Слишком много хештегов! Добавьте не больше ${HashtagRule.COUNT}`,
-  3
-);
-
-pristine.addValidator(
-  hashtagsField,
-  validateHashtagSpacing,
-  'Хештеги должны разделяться пробелами',
   4
 );
 
