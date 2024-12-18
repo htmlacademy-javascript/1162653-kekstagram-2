@@ -1,8 +1,9 @@
+import { picturePreview } from './util.js';
+
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const SHOWN_PICTURE_COUNT = 0;
 
 const pictureChooser = document.querySelector('.img-upload__input');
-const picturePreview = document.querySelector('.img-upload__preview img');
 const effectsPreview = document.querySelectorAll('.effects__preview');
 
 const showUserPicture = () => {

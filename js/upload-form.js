@@ -1,23 +1,22 @@
-import { isEscapeKey } from './util.js';
+import { isEscapeKey, uploadPictureForm } from './util.js';
 import { validateForm, resetValidateForm } from './form-validation.js';
 import { resetScale } from './picture-resizer.js';
 import { resetEffects, initializeEffects } from './picture-effects.js';
 import { sendData } from './api.js';
 import { showModal } from './user-messages.js';
 
-const uploadPictureForm = document.querySelector('.img-upload__form');
+// Добавляем интерактивность кнопок
+const SubmitButtonText = {
+  IDLE: 'Сохранить',
+  SENDING: 'Сохраняю...'
+};
+
 const hashtagsField = uploadPictureForm.querySelector('.text__hashtags');
 const commentField = uploadPictureForm.querySelector('.text__description');
 const uploadPictureButton = document.querySelector('.img-upload__input');
 const pictureEditor = document.querySelector('.img-upload__overlay');
 const closeEditorButton = document.querySelector('.img-upload__cancel');
 const submitButton = document.querySelector('.img-upload__submit');
-
-// Добавляем интерактивность кнопок
-const SubmitButtonText = {
-  IDLE: 'Сохранить',
-  SENDING: 'Сохраняю...'
-};
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;

@@ -1,3 +1,7 @@
+const picturesContainer = document.querySelector('.pictures');
+const uploadPictureForm = document.querySelector('.img-upload__form');
+const picturePreview = document.querySelector('.img-upload__preview img');
+
 // Функция для выбора кнопок
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
@@ -12,4 +16,4 @@ const debounce = (callback, timeoutDelay) => {
 };
 
 
-export { isEscapeKey, debounce };
+export { isEscapeKey, debounce, picturesContainer, uploadPictureForm, picturePreview };
