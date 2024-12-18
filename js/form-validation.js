@@ -4,7 +4,7 @@ const COMMENT_LENGTH = 140;
 
 const HashtagRule = {
   PATTERN: /^#[a-zа-яё0-9]{1,19}$/i,
-  SPACING: /#[^\s]+#/,
+  SPACING: /^#[^#]*$/,
   LENGTH: 20,
   COUNT: 5,
 };
@@ -39,7 +39,7 @@ const validateHashtagUnique = (value) => {
 };
 
 // Проверка на разделение пробелами
-const validateHashtagSpacing = (value) => !HashtagRule.SPACING.test(value);
+const validateHashtagSpacing = (value) => transformHashtags(value).every((hashtag) => HashtagRule.SPACING.test(hashtag));
 
 // Проверка на соответствие правилам написания хештегов
 const validateHashtagPattern = (value) => {
@@ -75,7 +75,7 @@ pristine.addValidator(
   hashtagsField,
   validateHashtagSpacing,
   'Хештеги должны разделяться пробелами',
-  1,
+  4,
   true
 );
 
@@ -83,21 +83,21 @@ pristine.addValidator(
   hashtagsField,
   validateHashtagPattern,
   () => hashtagErrors.join('<br>'),
-  2
+  3
 );
 
 pristine.addValidator(
   hashtagsField,
   validateHashtagUnique,
   'Хэштеги не должны повторяться',
-  3
+  2
 );
 
 pristine.addValidator(
   hashtagsField,
   validateHashtagsCount,
   `Слишком много хештегов! Добавьте не больше ${HashtagRule.COUNT}`,
-  4
+  1
 );
 
 // Функция проверки формы
