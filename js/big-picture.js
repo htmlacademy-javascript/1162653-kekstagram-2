@@ -1,7 +1,6 @@
-import { isEscapeKey } from './util.js';
+import { isEscapeKey, bigPicture } from './util.js';
 import { clearComments, renderComments } from './comments.js';
 
-const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
 const bigPictureCloseButton = bigPicture.querySelector('.big-picture__cancel');
 const likesCount = bigPicture.querySelector('.likes-count');

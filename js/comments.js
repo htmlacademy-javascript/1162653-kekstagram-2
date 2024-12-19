@@ -1,8 +1,9 @@
+import { bigPicture } from './util.js';
+
 const COUNT_STEP = 5;
 let currentCount = 0;
 let comments = [];
 
-const bigPicture = document.querySelector('.big-picture');
 const commentsContainer = bigPicture.querySelector('.social__comments');
 const commentsTemplate = document.querySelector('.social__comment');
 const commentLoader = bigPicture.querySelector('.comments-loader');

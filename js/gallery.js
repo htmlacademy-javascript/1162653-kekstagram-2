@@ -12,7 +12,9 @@ const initGallery = (photos) => {
     if (currentPicture) {
       const pictureId = Number(currentPicture.dataset.pictureId);
       const selectedPhoto = photos.find((photo) => photo.id === pictureId);
-      openBigPicture(selectedPhoto);
+      if (selectedPhoto) {
+        openBigPicture(selectedPhoto);
+      }
     }
   });
 };
