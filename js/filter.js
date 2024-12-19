@@ -45,11 +45,7 @@ const getFilteredPictures = () => {
 const onFilterClick = (evt) => {
   const targetButton = evt.target;
 
-  if (!targetButton.matches('.img-filters__button')) {
-    return;
-  }
-
-  if (targetButton.id === currentFilter) {
+  if (!targetButton.matches('.img-filters__button') || targetButton.id === currentFilter) {
     return;
   }
 

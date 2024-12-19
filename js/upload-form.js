@@ -1,7 +1,7 @@
 import { isEscapeKey, uploadPictureForm } from './util.js';
 import { validateForm, resetValidateForm } from './form-validation.js';
 import { resetScale } from './picture-resizer.js';
-import { resetEffects, initializeEffects } from './picture-effects.js';
+import { resetEffects } from './picture-effects.js';
 import { sendData } from './api.js';
 import { showModal } from './user-messages.js';
 
@@ -40,7 +40,7 @@ const onDocumentKeydown = (evt) => {
 const openPictureEditor = () => {
   pictureEditor.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  initializeEffects();
+  resetEffects();
   document.addEventListener('keydown', onDocumentKeydown);
 };
 

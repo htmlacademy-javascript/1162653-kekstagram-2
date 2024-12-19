@@ -1,12 +1,15 @@
 import { uploadPictureForm } from './util.js';
 
-const COMMENT_LENGTH = 140;
+const COMMENT_MAX_LENGTH = 140;
 
-const HashtagRule = {
+const HashtagRegExp = {
   PATTERN: /^#[a-zа-яё0-9]{1,19}$/i,
   SPACING: /^#[^#]*$/,
-  LENGTH: 20,
-  COUNT: 5,
+};
+
+const Hashtag = {
+  MAX_LENGTH: 20,
+  MAX_COUNT: 5,
 };
 
 const hashtagsField = uploadPictureForm.querySelector('.text__hashtags');
@@ -28,7 +31,7 @@ const transformHashtags = (value) => value.toLowerCase().trim().split(/\s+/).fil
 // Проверка на количество хештегов
 const validateHashtagsCount = (value) => {
   const hashtags = transformHashtags(value);
-  return hashtags.length <= HashtagRule.COUNT;
+  return hashtags.length <= Hashtag.MAX_COUNT;
 };
 
 // Проверка на уникальность
@@ -39,7 +42,7 @@ const validateHashtagUnique = (value) => {
 };
 
 // Проверка на разделение пробелами
-const validateHashtagSpacing = (value) => transformHashtags(value).every((hashtag) => HashtagRule.SPACING.test(hashtag));
+const validateHashtagSpacing = (value) => transformHashtags(value).every((hashtag) => HashtagRegExp.SPACING.test(hashtag));
 
 // Проверка на соответствие правилам написания хештегов
 const validateHashtagPattern = (value) => {
@@ -51,9 +54,9 @@ const validateHashtagPattern = (value) => {
       hashtagErrors.push(`Хэштег ${hashtag} должен начинаться с символа #.`);
     } else if (hashtag.length === 1) {
       hashtagErrors.push(`Хэштег ${hashtag} не может состоять только из #.`);
-    } else if (hashtag.length > HashtagRule.LENGTH) {
-      hashtagErrors.push(`Хэштег ${hashtag} не может содержать более ${HashtagRule.LENGTH} символов.`);
-    } else if (!HashtagRule.PATTERN.test(hashtag)) {
+    } else if (hashtag.length > Hashtag.MAX_LENGTH) {
+      hashtagErrors.push(`Хэштег ${hashtag} не может содержать более ${Hashtag.MAX_LENGTH} символов.`);
+    } else if (!HashtagRegExp.PATTERN.test(hashtag)) {
       hashtagErrors.push(`Хэштег ${hashtag} должен состоять только из букв и чисел`);
     }
   });
@@ -62,13 +65,13 @@ const validateHashtagPattern = (value) => {
 };
 
 // Валидлация комментария
-const validateComment = (value) => value.length <= COMMENT_LENGTH;
+const validateComment = (value) => value.length <= COMMENT_MAX_LENGTH;
 
 // Совершаем проверку и присваиваем ошибки
 pristine.addValidator(
   commentField,
   validateComment,
-  `Краткость — сестра таланта. Сократите текст до ${COMMENT_LENGTH} символов`
+  `Краткость — сестра таланта. Сократите текст до ${COMMENT_MAX_LENGTH} символов`
 );
 
 pristine.addValidator(
@@ -96,7 +99,7 @@ pristine.addValidator(
 pristine.addValidator(
   hashtagsField,
   validateHashtagsCount,
-  `Слишком много хештегов! Добавьте не больше ${HashtagRule.COUNT}`,
+  `Слишком много хештегов! Добавьте не больше ${Hashtag.MAX_COUNT}`,
   1
 );
 
